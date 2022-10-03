@@ -15,32 +15,7 @@ app.listen(PORT,() => {
 
 //state
 let pastEAndR = [];
-
-
-//I don't think I need this stuff.
-// function addition(firstNum, secondNum){
-//     let aProduct = firstNum + secondNum;
-//     return aProduct;
-// }
-// function subtract(firstNum, secondNum){
-//     let mProduct = firstNum - secondNum; 
-//     return mProduct;
-// }
-// function multiply(firstNum, secondNum){
-//     let mulProduct = firstNum * secondNum ;
-//     return mulProduct;
-// }
-// function divide(firstNum, secondNum){
-//     let dProduct = firstNum / secondNum;
-//     return dProduct;
-// }
-
-
-// let operators = {
-//     plus: addition(),
-//     minus: subtract(),
-//     times: multiply(),
-//     division:divide()
+let history = [];
 
 app.post('/calc', (req, res) => {
     console.log('in calc POST', req.body);
@@ -61,9 +36,9 @@ app.post('/calc', (req, res) => {
         newInputsFrom.result = Number(newInputsFrom.numberOne) / Number(newInputsFrom.numberTwo);
     }
 
-  
     pastEAndR.push(newInputsFrom);
     console.log(pastEAndR);
+    //A good server always sends messages back
     res.sendStatus(201);
     //This is what the status code does
     //201 Created: The server created some new data for you
@@ -78,10 +53,8 @@ app.get('/calc', function(req, res) {
      res.send(pastEAndR);
  });
 
- //This second GET is for the history
-//   app.get('/calc', (req, res) => {
-//     console.log('in calc GET2', req.body);
-    
-
-//     res.send()
+ //This will get the history from over here.
+//   app.get('/calc2', (req, res) => {
+//     res.send(newInputsFrom);
 //   })
+//This did not work, so I just used on get method

@@ -7,13 +7,14 @@ let pastCalc = [];
 
 function handleReady(){
     console.log("jquery is loaded")
+    loadNumbers();
     $('#plusBtn').on('click',onPlus);
     $('#minusBtn').on('click',onMinus);
     $('#timesBtn').on('click',onTimes);
     $('#divideBtn').on('click',onDivide);
 
     $('#equalBtn').on('click',numberInputs);
-    //$('#clearBtn').on('click',numberInputs);
+    $('#clearBtn').on('click',clearInputs);
 }
 
 let newInputs = {
@@ -65,11 +66,13 @@ function numberInputs(evt){
   .catch((err) => {
     console.log('GET /calc error', err);
   });
-
-  $('#1stNumber').val('');
-  $('#2ndNumber').val('');
-
+  clearInputs();
 }
+function clearInputs(){
+$('#1stNumber').val('');
+$('#2ndNumber').val('');
+}
+
 
 
 function loadNumbers(){
@@ -84,6 +87,7 @@ function loadNumbers(){
     console.log('GET /calc', response);
     pastCalc = response;
     render();
+    renderHistory(pastCalc);
   })
   .catch((err) => {
    console.log('GET /calc error', err);
@@ -99,19 +103,31 @@ function loadNumbers(){
   $('#newProduct').append(`${pastCalc[pastCalc.length -1].result}`);
  }
 
- function loadHistory(){
- console.log('In load History')
+//  function loadHistory(){
+//  console.log('In load History')
 //  $.ajax({
-//   url: '/calc',
+//   url: '/calc2',
 //   method: 'GET',
 // })
 // .then((response) => {
 //   console.log('GET /calc', response);
-//   pastCalc.push(response);
-//   render();
+//   renderHistory(response);
 // })
 // .catch((err) => {
 //  console.log('GET /calc error', err);
 // })
- }
+//  }
 
+//I tried to add this, but it wouldn't work, 
+//so I just called the renderHistory function in the 1st get method.
+
+ function renderHistory(newFormula){
+  $('#pastProducts').empty()
+  for(let formula of newFormula){
+    $('#pastProducts').append(`<li>
+ ${formula.numberOne}
+ ${formula.ops}
+ ${formula.numberTwo} =
+ ${formula.result}</li>`)
+ }
+}
