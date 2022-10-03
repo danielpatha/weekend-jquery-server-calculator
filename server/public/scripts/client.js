@@ -1,42 +1,63 @@
 $(document).ready(handleReady);
-
+//the state
 let pastCalc = [];
-let operator = '';
+
+
 
 
 function handleReady(){
     console.log("jquery is loaded")
     $('#plusBtn').on('click',onPlus);
-    $('#minusBtn').on('click', );
-    $('#timesBtn').on('click', );
-    $('#divideBtn').on('click', );
+    $('#minusBtn').on('click',onMinus);
+    $('#timesBtn').on('click',onTimes);
+    $('#divideBtn').on('click',onDivide);
 
-
-
-    $('#inputs','#equalBtn').on('submit',numberInputs);
-    $('#clearBtn').on('click',clearBtn);
+    $('#equalBtn').on('click',numberInputs);
+    //$('#clearBtn').on('click',numberInputs);
 }
+
+let newInputs = {
+};
+
+function onPlus(evt){
+  evt.preventDefault();
+  newInputs.ops = '+'
+}
+function onMinus(evt){
+  evt.preventDefault();
+  newInputs.ops = '-'
+}
+function onTimes(evt){
+  evt.preventDefault();
+  newInputs.ops = '*'
+}
+function onDivide(evt){
+  evt.preventDefault();
+  newInputs.ops = '/'
+}
+
 //We do POST first because it'll send this data to the server, 
 //then gets the logic from the server
-function numberInputs(){
-  //evt.preventDefault();
 
+function numberInputs(evt){
+  evt.preventDefault();
+  console.log("equalbtn");
   console.log('in numberInputs')
+  
+ 
+  newInputs.numberOne = $('#1stNumber').val(),
+  newInputs.numberTwo = $('#2ndNumber').val(),
 
-  let newInputs = {
-    numberOne: $('#1stNumber').val(),
-    numberTwo: $('#2ndNumber').val(),
-    serverOperator: operator
-  };
+
 //POST, This sends DATA to the server
  $.ajax({
     url: '/calc',
     method: 'POST',
     data: newInputs
+    //You should always send a object here
   })
-  .then((response) => {
-    console.log('POST /calc', response);
-    if(response === 'Created')
+  .then(response => {
+    console.log('POST/calc response', response);
     loadNumbers(); 
     //The render is what will append to the dom.
     // clearBtn();
@@ -45,10 +66,11 @@ function numberInputs(){
     console.log('GET /calc error', err);
   });
 
-  $('#playerOneInput').val('');
-  $('#playerTwoInput').val('');
+  $('#1stNumber').val('');
+  $('#2ndNumber').val('');
 
 }
+
 
 function loadNumbers(){
   console.log('in loadNumbers');
@@ -60,28 +82,36 @@ function loadNumbers(){
   })
   .then((response) => {
     console.log('GET /calc', response);
-    pastCalc.push(response);
+    pastCalc = response;
     render();
   })
   .catch((err) => {
    console.log('GET /calc error', err);
   })
 
-}
 
-function onPlus(){
-  operator = '+';
 }
 
 
 
  function render(){
-  $('#newProduct').val('')
-  $('#newProduct').val(`${pastCalc[pastCalc.length -1].result}`);
-
-
-  
-
+  $('#newProduct').empty()
+  $('#newProduct').append(`${pastCalc[pastCalc.length -1].result}`);
  }
 
+ function loadHistory(){
+ console.log('In load History')
+//  $.ajax({
+//   url: '/calc',
+//   method: 'GET',
+// })
+// .then((response) => {
+//   console.log('GET /calc', response);
+//   pastCalc.push(response);
+//   render();
+// })
+// .catch((err) => {
+//  console.log('GET /calc error', err);
+// })
+ }
 
