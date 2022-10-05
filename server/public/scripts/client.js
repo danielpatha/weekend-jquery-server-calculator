@@ -86,8 +86,9 @@ function loadNumbers(){
   .then((response) => {
     console.log('GET /calc', response);
     pastCalc = response;
-    render();
     renderHistory(pastCalc);
+    $('#newProduct').empty()
+    $('#newProduct').append(`PRODUCT:  ${pastCalc[pastCalc.length -1].result}`);
   })
   .catch((err) => {
    console.log('GET /calc error', err);
@@ -98,10 +99,6 @@ function loadNumbers(){
 
 
 
- function render(){
-  $('#newProduct').empty()
-  $('#newProduct').append(`${pastCalc[pastCalc.length -1].result}`);
- }
 
 //  function loadHistory(){
 //  console.log('In load History')
@@ -124,10 +121,10 @@ function loadNumbers(){
  function renderHistory(newFormula){
   $('#pastProducts').empty()
   for(let formula of newFormula){
-    $('#pastProducts').append(`<li>
+    $('#pastProducts').append(`<p>
  ${formula.numberOne}
  ${formula.ops}
  ${formula.numberTwo} =
- ${formula.result}</li>`)
+ ${formula.result}</p>`)
  }
 }
